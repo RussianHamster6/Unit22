@@ -9,19 +9,18 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 
-import urllib
-
 from __future__ import print_function
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
+import gspread
+import urllib
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 
 # The ID and range of a sample spreadsheet.
 SAMPLE_SPREADSHEET_ID = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms'
-SAMPLE_RANGE_NAME = 'Class Data!A2:E'
 
 def main():
     """Shows basic usage of the Sheets API.
@@ -36,7 +35,7 @@ def main():
 
     # Call the Sheets API
     SPREADSHEET_ID = '1vPS7onHZKN3PcVgIfP6fmlmXZelPaKGXwFBL5fKt3d4'
-    RANGE_NAME = 'D'
+    RANGE_NAME = 'D2:DT'
     result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                                 range=RANGE_NAME).execute()
     values = result.get('values', [])
@@ -46,7 +45,11 @@ def main():
     else:
         print('URL:')
         for row in values:
+            try:
+                print(row[3])
+            except:
+                sheet.delete_row(row)
 
 
 if __name__ == '__main__':
-    main()
+   main()
