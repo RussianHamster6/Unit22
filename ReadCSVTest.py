@@ -11,9 +11,9 @@
 
 from __future__ import print_function
 from googleapiclient.discovery import build
+from googleapiclient import discovery
 from httplib2 import Http
 from oauth2client import file, client, tools
-import gspread
 import urllib
 
 # If modifying these scopes, delete the file token.json.
@@ -26,6 +26,8 @@ def main():
     """Shows basic usage of the Sheets API.
     Prints values from a sample spreadsheet.
     """
+    index = 2
+
     store = file.Storage('token.json')
     creds = store.get()
     if not creds or creds.invalid:
@@ -40,15 +42,38 @@ def main():
                                                 range=RANGE_NAME).execute()
     values = result.get('values', [])
 
+
+    service = discovery.build('sheets', 'v4', credentials=creds)
+
+    batch_update_spreadsheet_request_body = {
+       "requests": [
+        {
+        "deleteDimension": {
+            "range": {
+           "sheetId": SPREADSHEET_ID,
+           "dimension": "ROWS",
+           "startIndex": 2,
+           "endIndex": 2
+           }
+       }
+       },
+       ]
+   }
+
     if not values:
         print('No data found.')
     else:
         print('URL:')
         for row in values:
             try:
-                print(row[3])
+                print(row[1])
+                print(index)
             except:
-                sheet.delete_row(row)
+                print('error')
+                #request = service.spreadsheets().batchUpdate(SPREADSHEET_ID, body=batch_update_spreadsheet_request_body)
+            index = index + 1
+
+
 
 
 if __name__ == '__main__':
