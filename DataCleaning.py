@@ -11,29 +11,46 @@
 
 import csv
 import os
-import httplib
+import httplib2
+import ssl
 
 coll = 123
+
+file= open('cleanedData.txt' , 'r+')
 
 with open('UK Makerspaces Research Survey (Public 2015-01-12).csv') as f:
     reader = csv.reader(f)
     for row in reader:
 
-        row3 = row[3]
-        splitRow3 = row3[7:]
+        domainName = row[3]
+        print(domainName)
+        if not row[3] == '':
+            try:
+                resp,content = httplib2.Http().request(domainName)
 
-        try:
-            connected = httplib.HTTPConnection(splitRow3)
-            connected.connect()
-            row[coll] = 'Exists'
-        except:
-            row[coll] = 'Doesnt Exist'
+                if resp.status == '200':
+                    print ('It Worked')
+                else:
+                    print ('Not worked')
+                #file.write(str(domainName))
 
-        """if (response == 0):
-            print (row[3])
-            row[coll] = 'exists'
-
+                """
+                if '200' in resp:
+                    file.write(str(domainName))
+                else:
+                    print("Website Closed")
+                """
+            except httplib2.RelativeURIError:
+                print ('not absolute url')
+            except ssl.SSLError:
+                print("Failed Connection")
+            except httplib2.ServerNotFoundError:
+                print('Server not found')
+            except httplib2.RedirectLimit:
+                print ('Redirect Limit Reached')
         else:
-            row[coll] = 'Doesnt Exist'
-        """
-        print(row)
+            print("No Webpage")
+
+
+
+file.close()
