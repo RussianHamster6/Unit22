@@ -28,18 +28,12 @@ with open('UK Makerspaces Research Survey (Public 2015-01-12).csv') as f:
             try:
                 resp,content = httplib2.Http().request(domainName)
 
-                if resp.status == '200':
-                    print ('It Worked')
+                if resp.status == 200:
+                    file.write(str(row))
+                    file.write('\n')
                 else:
-                    print ('Not worked')
-                #file.write(str(domainName))
+                    print ('Website Connection Error')
 
-                """
-                if '200' in resp:
-                    file.write(str(domainName))
-                else:
-                    print("Website Closed")
-                """
             except httplib2.RelativeURIError:
                 print ('not absolute url')
             except ssl.SSLError:
