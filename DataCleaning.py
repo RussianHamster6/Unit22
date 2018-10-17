@@ -1,11 +1,11 @@
 #-------------------------------------------------------------------------------
-# Name:        module1
+# Name:        DataCleaning
 # Purpose:
 #
-# Author:      12rhodesd
+# Author:      Declan Rhodes
 #
 # Created:     05/10/2018
-# Copyright:   (c) 12rhodesd 2018
+# Copyright:   (c) Declan Rhodes 2018
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 
