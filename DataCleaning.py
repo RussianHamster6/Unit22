@@ -13,14 +13,21 @@ import csv
 import os
 import httplib2
 import ssl
+import sys
 
 coll = 123
 
-file= open('cleanedData.txt' , 'r+')
+header = True
 
-with open('UK Makerspaces Research Survey (Public 2015-01-12).csv') as f:
-    reader = csv.reader(f)
+f = open('UK Makerspaces Research Survey (Public 2015-01-12).csv')
+reader = csv.reader(f)
+with open('cleanedData.csv', 'w') as newF:
+    writer = csv.writer(newF, delimiter=',')
     for row in reader:
+
+        if (header == True) :
+            writer.writerow([row[0],row[2],row[3],row[12]])
+            header = False
 
         domainName = row[3]
         print(domainName)
@@ -29,8 +36,7 @@ with open('UK Makerspaces Research Survey (Public 2015-01-12).csv') as f:
                 resp,content = httplib2.Http().request(domainName)
 
                 if resp.status == 200:
-                    file.write(str(row))
-                    file.write('\n')
+                    writer.writerow([row[0],row[2],row[3],row[12]])
                 else:
                     print ('Website Connection Error')
 
@@ -46,5 +52,4 @@ with open('UK Makerspaces Research Survey (Public 2015-01-12).csv') as f:
             print("No Webpage")
 
 
-
-file.close()
+newF.close()
